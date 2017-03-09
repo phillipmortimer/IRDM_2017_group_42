@@ -1,0 +1,180 @@
+\documentclass[english]{article}
+
+%These tell TeX which packages to use.
+\usepackage{algorithm,algpseudocode}
+\usepackage{array,epsfig}
+\usepackage{amsmath}
+\newcommand{\Mod}[1]{\ (\text{mod}\ #1)}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsxtra}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{matlab-prettifier}
+\usepackage{scrextend}
+\usepackage{mathtools,calc}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\newcommand\hcancel[2][0.5pt]{%
+  \ifmmode\sbox\CBox{$#2$}\else\sbox\CBox{#2}\fi%
+  \makebox[0pt][l]{\usebox\CBox}%  
+  \rule[0.5\ht\CBox-#1/2]{\wd\CBox}{#1}}
+%\usepackage{kbordermatrix}
+
+
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+
+%Here I define some theorem styles and shortcut commands for symbols I use often
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{cor}{Corollary}
+\newtheorem*{rmk}{Remark}
+\newtheorem{lem}{Lemma}
+\newtheorem*{joke}{Joke}
+\newtheorem{ex}{Example}
+\newtheorem*{soln}{Solution}
+\newtheorem{prop}{Proposition}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\lra}{\longrightarrow}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\surj}{\twoheadrightarrow}
+\newcommand{\graph}{\mathrm{graph}}
+\newcommand{\bb}[1]{\mathbb{#1}}
+\newcommand{\Z}{\bb{Z}}
+\newcommand{\Q}{\bb{Q}}
+\newcommand{\R}{\bb{R}}
+\newcommand{\C}{\bb{C}}
+\newcommand{\N}{\bb{N}}
+\newcommand{\M}{\mathbf{M}}
+\newcommand{\m}{\mathbf{m}}
+\newcommand{\MM}{\mathscr{M}}
+\newcommand{\HH}{\mathscr{H}}
+\newcommand{\Om}{\Omega}
+\newcommand{\Ho}{\in\HH(\Om)}
+\newcommand{\bd}{\partial}
+\newcommand{\del}{\partial}
+\newcommand{\bardel}{\overline\partial}
+\newcommand{\textdf}[1]{\textbf{\textsf{#1}}\index{#1}}
+\newcommand{\img}{\mathrm{img}}
+\newcommand{\ip}[2]{\left\langle{#1},{#2}\right\rangle}
+\newcommand{\inter}[1]{\mathrm{int}{#1}}
+\newcommand{\exter}[1]{\mathrm{ext}{#1}}
+\newcommand{\cl}[1]{\mathrm{cl}{#1}}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\vol}{\mathrm{vol}}
+\newcommand{\cnt}{\mathrm{ct}}
+\newcommand{\osc}{\mathrm{osc}}
+\newcommand{\LL}{\mathbf{L}}
+\newcommand{\UU}{\mathbf{U}}
+\newcommand{\support}{\mathrm{support}}
+\newcommand{\AND}{\;\wedge\;}
+\newcommand{\OR}{\;\vee\;}
+\newcommand{\Oset}{\varnothing}
+\newcommand{\st}{\ni}
+\newcommand{\wh}{\widehat}
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+   \def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+%Pagination stuff.
+\setlength{\topmargin}{-.3 in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textheight}{9.in}
+\setlength{\textwidth}{6.5in}
+
+\newcommand{\pythonstyle}{\lstset{
+language=Python,
+keywordstyle=\color{blue},
+stringstyle=\color{mylilas},
+commentstyle=\color{mygreen},%
+numbers=left,%
+numberstyle={\tiny \color{black}},%
+numbersep=9pt,
+}}
+
+\newcommand{\matlabstyle}{\lstset{language=Matlab,%
+    %basicstyle=\color{red},
+    breaklines=true,%
+    morekeywords={matlab2tikz},
+    keywordstyle=\color{blue},%
+    morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+    identifierstyle=\color{black},%
+    stringstyle=\color{mylilas},
+    commentstyle=\color{mygreen},%
+    showstringspaces=false,%without this there will be a symbol in the places where there is a space
+    numbers=left,%
+    numberstyle={\tiny \color{black}},% size of the numbers
+    numbersep=9pt, % this defines how far the numbers are from the text
+    emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+    %emph=[2]{word1,word2}, emphstyle=[2]{style},
+}}
+
+\begin{document}
+\title{IRDM 2017 Project:\\Learning to Rank
+}
+\author{Group 42:\\
+Ren Huang \\
+Tom Jakab\\
+Phillip Mortimer (16052718)}
+\maketitle
+
+\section{Introdcution}
+
+Introduction
+
+\section{Literature review}
+
+Literature review
+
+\subsection{Traditional learning to rank approaches}
+
+Non-deep learning
+
+\subsection{Deep learning to rank}
+
+For the 25\% bonus points
+
+\section{Dataset}
+
+Description of the MSR dataset
+
+\section{Methods used and theire implementation}
+
+\subsection{LambdaRank}
+
+lambdarank
+
+\subsection{RankNet}
+
+ranknet
+
+\subsection{Deep learning algorithm}
+
+deep learning algo of our choice for 25\% bonus points \cite{Sutskever}
+
+\section{Analysis of results}
+
+Analysis and evaluation
+
+\newpage
+\begin{thebibliography}{9}
+\bibitem{Sutskever}
+Ilya Sutskever James Martens, George Dahl, Geoffrey Hinton
+\textit{On the importance of initialization and momentum in deep learning}. 
+http://doi.org/10.1109/ICASSP.2013.6639346
+
+
+\end{thebibliography}
+
+
+\end{document}
