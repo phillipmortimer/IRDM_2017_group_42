@@ -127,20 +127,34 @@ Ren Huang \\
 Tom Jakab\\
 Phillip Mortimer (16052718)}
 \maketitle
+\begin{abstract}
+Required according to the problem sheet
+\end{abstract}
 
-\section{Introdcution}
+\section{Introduction to the problem}
 
 Introduction
 
-\section{Literature review}
+\section{Related work}
 
-Literature review
+Literature review?
 
-\subsection{Traditional learning to rank approaches}
+\subsection{Learning to rank}
 
-Non-deep learning
+Before machine learning techniques became popular, numerous algorithms were developed to rank documents by their relevance to a particular query.  These algorithms are now surpassed in performance by machine learning approaches, but they can still be used as features for machine learning algorithms. 
 
-\subsection{Deep learning to rank}
+An important non-probabilistic ranking algorithms is the term frequency - inverse document frequency (TF-IDF) weighting \cite{tfidf}.  The TF measures the frequency of occurrence of a given term in a document.  The IDF weights terms which occur in a small number of documents in a collection more highly, as infrequently occurring are likely to be more discriminative.  In vector space ranking, the TF-IDF weighting is extended by representing the queries and documents as a TF-IDF vectors.   A ranking score is computed based on the cosine similarity between the TF-IDF vector of the query and the TF-IDF vector of documents in the corpus.  Probabilistic models estimate the probability that a user will find a given document to a query.  The Okapi BM25 ranking is the considered the benchmark model of this type.  It is derived from modelling the distribution of within-document frequencies of a relevant
+term as a mixture of two Poisson distributions \cite{robertson1993okapi}.
+
+These approaches are all essentially hand-designed algorithms which use only a small number of features.  Given training data of queries $q$, documents $d$ and a relevance or rank score $y$, we can \textit{learn} to predict $y$ for a new query-document pair.  We review several of the more important machine learning techniques to do this in the following sections.
+
+\subsection{SVMs}
+
+\subsection{Perception based ranking}
+
+\subsection{Boosted regression}
+
+\subsection{Deep learning in ranking systems}
 
 For the 25\% bonus points
 
@@ -148,7 +162,9 @@ For the 25\% bonus points
 
 Description of the MSR dataset
 
-\section{Methods used and theire implementation}
+\section{Experiments}
+
+\subsection{The Statistics of the Dataset used}
 
 \subsection{LambdaRank}
 
@@ -164,7 +180,9 @@ logistic regression
 
 \subsection{Deep learning algorithm}
 
-deep learning algo of our choice for 25\% bonus points \cite{Sutskever}
+deep learning algo of our choice for 25\% bonus points \cite{gradclip}
+
+\subsection{Metrics and Results}
 
 \section{Analysis of results}
 
@@ -178,15 +196,14 @@ Effect of parameter tuning on performance
 
 Effect of parameter tuning on performance
 
+\section{Discussion and limitations}
+
+\section{Conclusion}
+
 \newpage
-\begin{thebibliography}{9}
-\bibitem{Sutskever}
-Ilya Sutskever James Martens, George Dahl, Geoffrey Hinton
-\textit{On the importance of initialization and momentum in deep learning}. 
-http://doi.org/10.1109/ICASSP.2013.6639346
+\medskip
 
-
-\end{thebibliography}
-
+\bibliographystyle{unsrt}
+\bibliography{IRDM_42}
 
 \end{document}
