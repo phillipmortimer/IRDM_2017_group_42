@@ -146,11 +146,17 @@ Before machine learning techniques became popular, numerous algorithms were deve
 An important non-probabilistic ranking algorithms is the term frequency - inverse document frequency (TF-IDF) weighting \cite{tfidf}.  The TF measures the frequency of occurrence of a given term in a document.  The IDF weights terms which occur in a small number of documents in a collection more highly, as infrequently occurring are likely to be more discriminative.  In vector space ranking, the TF-IDF weighting is extended by representing the queries and documents as a TF-IDF vectors.   A ranking score is computed based on the cosine similarity between the TF-IDF vector of the query and the TF-IDF vector of documents in the corpus.  Probabilistic models estimate the probability that a user will find a given document relevant to a query.  The Okapi BM25 ranking is the considered the benchmark model of this type.  It is derived from modelling the distribution of within-document frequencies of a relevant
 term as a mixture of two Poisson distributions \cite{robertson1993okapi}.
 
-These approaches are all essentially hand-designed algorithms which use only a small number of features.  Given training data of queries $q$, documents $d$ and a relevance or rank score $y$, we can \textit{learn} to predict $y$ for a new query-document pair.  We review several of the more important machine learning techniques to do this in the following sections.
+These approaches are all essentially hand-designed algorithms which use only a small number of features.  Given training data of queries $q$, documents $d$ and a relevance or rank score $y$, we can \textit{learn} to predict $y$ for a new query-document pair.  Machine learning techniques to do this are generally categorized into three approaches: \textit{pointwise}, \textit{pairwise} and \textit{listwise}.  We review these approaches in the following sections.
 
-\subsection{SVMs}
+\subsection{Pointwise methods}
 
-\subsection{Perception based ranking}
+In pointwise approaches the training data consists of triples $(\mathbf{q}, \mathbf{d}, y)$.  We train a ranking rule $h(\mathbf{w}, \phi (\mathbf{q}, \mathbf{d})) = y$, where $\phi$ is a mapping from query-document pairs to features and $\mathbf{w}$ is a vector of parameter weights.  Depending on how relevance is measured, this can be posed as a regression, classification or ordinal regression problem.  
+
+PRank \cite{crammer2001pranking} (Perceptron Ranking) is an online ranking algorithm with an update rule motivated by the classic perceptron algorithm.  The relevance rank is considered to be an ordered set $\{1, 2, \ldots, k \}$.  The ranking rule maintains a vector $\mathbf{w}$ and a series of thresholds $b_1 \le b_2 \ldots b_{k-1} \le b_k = \infty$.  Given a new instance $x$, the predicted rank is defined to be the index of the first threshold $b_r$ for which $\mathbf{w}^T \mathbf{x} < b_r$.  During training an instance $\mathbf{x}_t$ is received and the estimated rank $\hat{y}_t$ is calculated.  If $\hat{y}_t \ne y_t$, then $\mathbf{w}$ and the thresholds $b_r$ are updated according to a perceptron-like algorithm.  
+
+Pointwise approaches are widely used because of their simplicity and effectiveness.  However, a problem with pointwise methods is that the loss function used in training the model will be dominated by those queries which match a large number of documents.  The loss function also does not take into account the position of documents in the ranking list, which can lead to unimportant documents being given too much weight.
+
+\subsection{Pairwise methods}
 
 \subsection{Boosted regression}
 
@@ -160,7 +166,7 @@ For the 25\% bonus points
 
 We survey some recent papers in this field and summarize their findings.
 
-Deep convolutional networks have recently been applied to ranking text pairs by Severyn and Moschetti \cite{severyn2015learning}.  Their approach is to use a simple pointwise reranking approach, but to use deep learning to create a rich representation of query-document pairs.  First, a \textit{sentence model} uses a deep convolutional network to map queries and documents to an intermediate representation, which can be considered a sentence or document embedding.  Second, a \textit{matching model} receives (query representation)-(document representation) pairs and learns the semantic matching between the corresponding input query-document pairs.  The matching model is also a  deep convolutional network.  The model was trained and tested on TREC microblogging datasets from 2011 and 2012, consisting of 16M tweets.  It achieved mean average precision performance on par with previous state-of-the-art, even though the model requires no manual feature engineering and minimal pre-processing.
+Deep convolutional networks have recently been applied to ranking text pairs by Severyn and Moschetti \cite{severyn2015learning}.  Their approach combines a simple pointwise ranking with a deep learning architecture to create a rich representation of query-document pairs.  First, a \textit{sentence model} uses a deep convolutional network to map queries or documents to an intermediate representation.  Second, a \textit{matching model} receives (query representation)-(document representation) pairs form the sentence model and learns the semantic matching between the corresponding input query-document pairs.  The matching model is also a  deep convolutional network.  The model was trained and tested on TREC microblogging datasets from 2011 and 2012, consisting of 16M tweets.  It achieved mean average precision performance on par with previous state-of-the-art, even though the model requires no manual feature engineering and minimal pre-processing.
 
 \section{Dataset}
 
