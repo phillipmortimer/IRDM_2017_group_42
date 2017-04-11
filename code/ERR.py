@@ -1,8 +1,10 @@
-import numpy as np
-
 def err(scores, g_max=4, k=10):
     """
     Computes the ERR metric at rank k
+
+    Chapelle et al:
+    Expected reciprocal rank for graded relevance
+    http://dl.acm.org/citation.cfm?id=1646033
 
     :param scores: list
         A ranked list of (ordered) of actual relevance scores
