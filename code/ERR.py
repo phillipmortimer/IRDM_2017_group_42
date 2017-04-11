@@ -16,9 +16,6 @@ def err(scores, g_max=4, k=10):
         The ERR at k over the input lists
     """
 
-    if len(scores) > k:
-        scores = scores[:k]
-
     # Follow the algorithm pseudo-code (Algorithm 2)
     p = 1
     ERR = 0
