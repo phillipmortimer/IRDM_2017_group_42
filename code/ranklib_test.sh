@@ -1,0 +1,2 @@
+java -jar ../RankLib/RankLib.jar -load ../model/rn_f1_e3_l1_n10_lr-5.txt -norm linear -test ../data/Fold1/test.txt -metric2T NDCG@10 -idv ../output/rn_f1_e3_l1_n10_lr-5.ndcg.txt
+java -jar ../RankLib/RankLib.jar -load ../model/rn_f1_e3_l1_n10_lr-4.txt -norm linear -test ../data/Fold1/test.txt -metric2T NDCG@10 -idv ../output/rn_f1_e3_l1_n10_lr-4.ndcg.txt
