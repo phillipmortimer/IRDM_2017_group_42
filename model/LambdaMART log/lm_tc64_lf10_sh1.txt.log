@@ -1,0 +1,286 @@
+
+[+] General Parameters:
+Training data:	../data/Fold1/train.txt
+Test data:	../data/Fold1/test.txt
+Feature vector representation: Dense.
+Ranking method:	LambdaMART
+Feature description file:	Unspecified. All features will be used.
+Train metric:	NDCG@10
+Test metric:	NDCG@10
+Feature normalization: linear
+Model file: ../model/LambdaMART/lm_tc64_lf10_sh1.txt
+
+[+] LambdaMART's Parameters:
+No. of trees: 250
+No. of leaves: 10
+No. of threshold candidates: 64
+Learning rate: 1.0
+Stop early: 100 rounds without performance gain on validation data
+
+Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]: 0... Reading feature file [../data/Fold1/train.txt]... [Done.]            
+(6000 ranked lists, 723412 entries read)
+Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]: 0... Reading feature file [../data/Fold1/test.txt]... [Done.]            
+(2000 ranked lists, 241521 entries read)
+Initializing... [Done]
+---------------------------------
+Training starts...
+---------------------------------
+#iter   | NDCG@10-T | NDCG@10-V | 
+---------------------------------
+1       | 0.3548    | 
+2       | 0.3873    | 
+3       | 0.3941    | 
+4       | 0.4037    | 
+5       | 0.4092    | 
+6       | 0.4117    | 
+7       | 0.4127    | 
+8       | 0.4161    | 
+9       | 0.4191    | 
+10      | 0.4198    | 
+11      | 0.4225    | 
+12      | 0.4238    | 
+13      | 0.4275    | 
+14      | 0.4291    | 
+15      | 0.43      | 
+16      | 0.43      | 
+17      | 0.433     | 
+18      | 0.4346    | 
+19      | 0.4375    | 
+20      | 0.4391    | 
+21      | 0.4398    | 
+22      | 0.4409    | 
+23      | 0.4406    | 
+24      | 0.4409    | 
+25      | 0.4423    | 
+26      | 0.4435    | 
+27      | 0.4444    | 
+28      | 0.4447    | 
+29      | 0.4454    | 
+30      | 0.4451    | 
+31      | 0.4454    | 
+32      | 0.4455    | 
+33      | 0.4459    | 
+34      | 0.447     | 
+35      | 0.4471    | 
+36      | 0.4472    | 
+37      | 0.4475    | 
+38      | 0.4478    | 
+39      | 0.4486    | 
+40      | 0.4486    | 
+41      | 0.4497    | 
+42      | 0.4496    | 
+43      | 0.4497    | 
+44      | 0.4504    | 
+45      | 0.4505    | 
+46      | 0.4507    | 
+47      | 0.4509    | 
+48      | 0.4514    | 
+49      | 0.4519    | 
+50      | 0.4519    | 
+51      | 0.4526    | 
+52      | 0.4532    | 
+53      | 0.4531    | 
+54      | 0.4532    | 
+55      | 0.4536    | 
+56      | 0.4534    | 
+57      | 0.4539    | 
+58      | 0.4539    | 
+59      | 0.4535    | 
+60      | 0.4538    | 
+61      | 0.4543    | 
+62      | 0.4547    | 
+63      | 0.455     | 
+64      | 0.4556    | 
+65      | 0.456     | 
+66      | 0.4558    | 
+67      | 0.4566    | 
+68      | 0.4565    | 
+69      | 0.4564    | 
+70      | 0.4566    | 
+71      | 0.4569    | 
+72      | 0.4576    | 
+73      | 0.4572    | 
+74      | 0.4578    | 
+75      | 0.4582    | 
+76      | 0.4574    | 
+77      | 0.4576    | 
+78      | 0.4577    | 
+79      | 0.4578    | 
+80      | 0.458     | 
+81      | 0.4576    | 
+82      | 0.4578    | 
+83      | 0.458     | 
+84      | 0.4586    | 
+85      | 0.4582    | 
+86      | 0.4585    | 
+87      | 0.4584    | 
+88      | 0.4586    | 
+89      | 0.4587    | 
+90      | 0.4585    | 
+91      | 0.4586    | 
+92      | 0.4588    | 
+93      | 0.4595    | 
+94      | 0.4592    | 
+95      | 0.4594    | 
+96      | 0.4601    | 
+97      | 0.4601    | 
+98      | 0.4606    | 
+99      | 0.461     | 
+100     | 0.4609    | 
+101     | 0.4609    | 
+102     | 0.461     | 
+103     | 0.4615    | 
+104     | 0.4616    | 
+105     | 0.4616    | 
+106     | 0.4616    | 
+107     | 0.4616    | 
+108     | 0.4617    | 
+109     | 0.4619    | 
+110     | 0.4617    | 
+111     | 0.4616    | 
+112     | 0.4616    | 
+113     | 0.4614    | 
+114     | 0.4623    | 
+115     | 0.4624    | 
+116     | 0.4625    | 
+117     | 0.4631    | 
+118     | 0.463     | 
+119     | 0.4633    | 
+120     | 0.463     | 
+121     | 0.4628    | 
+122     | 0.4631    | 
+123     | 0.4637    | 
+124     | 0.4635    | 
+125     | 0.4634    | 
+126     | 0.4634    | 
+127     | 0.4637    | 
+128     | 0.4641    | 
+129     | 0.464     | 
+130     | 0.4641    | 
+131     | 0.4645    | 
+132     | 0.464     | 
+133     | 0.4645    | 
+134     | 0.4643    | 
+135     | 0.4641    | 
+136     | 0.4641    | 
+137     | 0.464     | 
+138     | 0.4643    | 
+139     | 0.4647    | 
+140     | 0.4645    | 
+141     | 0.4643    | 
+142     | 0.4647    | 
+143     | 0.4642    | 
+144     | 0.4647    | 
+145     | 0.465     | 
+146     | 0.465     | 
+147     | 0.4647    | 
+148     | 0.4652    | 
+149     | 0.465     | 
+150     | 0.4651    | 
+151     | 0.4658    | 
+152     | 0.4655    | 
+153     | 0.4658    | 
+154     | 0.466     | 
+155     | 0.4659    | 
+156     | 0.466     | 
+157     | 0.4662    | 
+158     | 0.4665    | 
+159     | 0.4661    | 
+160     | 0.4663    | 
+161     | 0.4667    | 
+162     | 0.4673    | 
+163     | 0.4679    | 
+164     | 0.4678    | 
+165     | 0.468     | 
+166     | 0.4687    | 
+167     | 0.4684    | 
+168     | 0.4679    | 
+169     | 0.4683    | 
+170     | 0.469     | 
+171     | 0.4688    | 
+172     | 0.4697    | 
+173     | 0.4705    | 
+174     | 0.4703    | 
+175     | 0.4702    | 
+176     | 0.47      | 
+177     | 0.4702    | 
+178     | 0.4708    | 
+179     | 0.4711    | 
+180     | 0.4712    | 
+181     | 0.471     | 
+182     | 0.4707    | 
+183     | 0.4707    | 
+184     | 0.4709    | 
+185     | 0.4709    | 
+186     | 0.4712    | 
+187     | 0.4714    | 
+188     | 0.4712    | 
+189     | 0.4714    | 
+190     | 0.471     | 
+191     | 0.4717    | 
+192     | 0.4718    | 
+193     | 0.4716    | 
+194     | 0.4722    | 
+195     | 0.472     | 
+196     | 0.472     | 
+197     | 0.4726    | 
+198     | 0.4722    | 
+199     | 0.4723    | 
+200     | 0.4722    | 
+201     | 0.4724    | 
+202     | 0.4723    | 
+203     | 0.4725    | 
+204     | 0.4725    | 
+205     | 0.473     | 
+206     | 0.473     | 
+207     | 0.4731    | 
+208     | 0.473     | 
+209     | 0.473     | 
+210     | 0.4729    | 
+211     | 0.4729    | 
+212     | 0.4732    | 
+213     | 0.4732    | 
+214     | 0.4737    | 
+215     | 0.4737    | 
+216     | 0.4738    | 
+217     | 0.4737    | 
+218     | 0.4737    | 
+219     | 0.474     | 
+220     | 0.4739    | 
+221     | 0.4741    | 
+222     | 0.4738    | 
+223     | 0.4741    | 
+224     | 0.4743    | 
+225     | 0.4743    | 
+226     | 0.4747    | 
+227     | 0.4751    | 
+228     | 0.4746    | 
+229     | 0.4749    | 
+230     | 0.4753    | 
+231     | 0.4749    | 
+232     | 0.4752    | 
+233     | 0.4753    | 
+234     | 0.4756    | 
+235     | 0.4758    | 
+236     | 0.4756    | 
+237     | 0.4757    | 
+238     | 0.4756    | 
+239     | 0.4755    | 
+240     | 0.4756    | 
+241     | 0.4759    | 
+242     | 0.4759    | 
+243     | 0.4759    | 
+244     | 0.4761    | 
+245     | 0.4762    | 
+246     | 0.4764    | 
+247     | 0.4767    | 
+248     | 0.4766    | 
+249     | 0.4767    | 
+250     | 0.4772    | 
+---------------------------------
+Finished sucessfully.
+NDCG@10 on training data: 0.4772
+---------------------------------
+NDCG@10 on test data: 0.4236
+
+Model saved to: ../model/LambdaMART/lm_tc64_lf10_sh1.txt
