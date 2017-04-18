@@ -23,7 +23,8 @@ def err(scores, g_max=4, k=10):
   p = 1.0
   ERR = 0.0
 
-  for i in range(k):
+  safe_k = min(len(scores), k)
+  for i in range(safe_k):
     # First map the relevance score to the probability of a relevance score
     R = (2.0 ** scores[i] - 1) / (2.0 ** g_max)
     ERR += p * R / (i + 1.0)
