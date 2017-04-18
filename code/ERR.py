@@ -7,7 +7,7 @@ def err(scores, g_max=4, k=10):
     http://dl.acm.org/citation.cfm?id=1646033
 
     :param scores: list
-        A ranked list of (ordered) of actual relevance scores
+        A ranked list (ordered) of actual relevance scores
     :param max_g: int
         The maximum possible relevance score
     :param k: int, optional
