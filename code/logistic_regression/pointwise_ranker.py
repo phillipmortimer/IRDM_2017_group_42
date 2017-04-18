@@ -9,8 +9,8 @@ import os
 import glob
 
 
-class LogisticRegressionTF(object):
-  def __init__(self, input_dim, n_classes, C=0.1, epochs=10, batch_size=32,
+class PointwiseRanker(object):
+  def __init__(self, input_dim, n_classes, model_type='logreg', C=0.1, epochs=10, batch_size=32,
                class_weight=None, model_dir=None):
     self.input_dim = input_dim
     self.n_classes = n_classes
@@ -21,6 +21,7 @@ class LogisticRegressionTF(object):
     self.class_weight = class_weight
     self.model = None
     self.model_dir = model_dir
+    self.model_type = model_type
     self.model_init()
 
 
@@ -54,11 +55,20 @@ class LogisticRegressionTF(object):
 
 
   def model_init(self):
-    reg = l2(self.C)
     optimizer = RMSprop()
     self.model = Sequential()
-    self.model.add(Dense(self.n_classes, kernel_regularizer=reg,
-                    input_dim=self.input_dim))
+
+    if self.model_type == 'MLP':
+      self.model.add(Dense(200, input_dim=self.input_dim, activation='relu'))
+      self.model.add(Dense(200, activation='relu'))
+      self.model.add(Dense(self.n_classes))
+    elif self.model_type == 'logreg':
+      reg = l2(self.C)
+      self.model.add(Dense(self.n_classes, kernel_regularizer=reg,
+                           input_dim=self.input_dim))
+    else:
+      raise ValueError('Unsupported model type: ' + self.model_type)
+
     self.model.add(Activation('softmax'))
     self.model.compile(optimizer=optimizer,
                        loss='sparse_categorical_crossentropy',

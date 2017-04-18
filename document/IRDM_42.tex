@@ -24,7 +24,7 @@
 \usepackage{url}
 \newcommand\hcancel[2][0.5pt]{%
   \ifmmode\sbox\CBox{$#2$}\else\sbox\CBox{#2}\fi%
-  \makebox[0pt][l]{\usebox\CBox}%  
+  \makebox[0pt][l]{\usebox\CBox}%
   \rule[0.5\ht\CBox-#1/2]{\wd\CBox}{#1}}
 %\usepackage{kbordermatrix}
 
@@ -156,7 +156,7 @@ Section 4 details the theory and results of the experiments, performed using dif
 
 \subsection{Learning to rank}
 
-Before machine learning techniques became popular, numerous algorithms were developed to rank documents by their relevance to a particular query.  These algorithms are now surpassed in performance by machine learning approaches, but they can still be used as features for machine learning algorithms. 
+Before machine learning techniques became popular, numerous algorithms were developed to rank documents by their relevance to a particular query.  These algorithms are now surpassed in performance by machine learning approaches, but they can still be used as features for machine learning algorithms.
 
 An important non-probabilistic ranking algorithms is the term frequency - inverse document frequency (TF-IDF) weighting \cite{tfidf}.  The TF measures the frequency of occurrence of a given term in a document.  The IDF weights terms which occur in a small number of documents in a collection more highly, as infrequently occurring are likely to be more discriminative.  In vector space ranking, the TF-IDF weighting is extended by representing the queries and documents as a TF-IDF vectors.   A ranking score is computed based on the cosine similarity between the TF-IDF vector of the query and the TF-IDF vector of documents in the corpus.  Probabilistic models estimate the probability that a user will find a given document relevant to a query.  The Okapi BM25 ranking is the considered the benchmark model of this type.  It is derived from modelling the distribution of within-document frequencies of a relevant
 term as a mixture of two Poisson distributions \cite{robertson1993okapi}.
@@ -165,9 +165,9 @@ These approaches are all essentially hand-designed algorithms which use only a s
 
 \subsection{Pointwise methods}
 
-In pointwise approaches the training data consists of triples $(\mathbf{q}, \mathbf{d}, y)$.  We train a ranking rule $h(\mathbf{w}, \phi (\mathbf{q}, \mathbf{d})) = y$, where $\phi$ is a mapping from query-document pairs to features and $\mathbf{w}$ is a vector of parameter weights.  Depending on how relevance is measured, this can be posed as a regression, classification or ordinal regression problem.  
+In pointwise approaches the training data consists of triples $(\mathbf{q}, \mathbf{d}, y)$.  We train a ranking rule $h(\mathbf{w}, \phi (\mathbf{q}, \mathbf{d})) = y$, where $\phi$ is a mapping from query-document pairs to features and $\mathbf{w}$ is a vector of parameter weights.  Depending on how relevance is measured, this can be posed as a regression, classification or ordinal regression problem.
 
-PRank \cite{crammer2001pranking} (Perceptron Ranking) is an online ranking algorithm with an update rule motivated by the classic perceptron algorithm.  The relevance rank is considered to be an ordered set $\{1, 2, \ldots, k \}$.  The ranking rule maintains a vector $\mathbf{w}$ and a series of thresholds $b_1 \le b_2 \ldots b_{k-1} \le b_k = \infty$.  Given a new instance $x$, the predicted rank is defined to be the index of the first threshold $b_r$ for which $\mathbf{w}^T \mathbf{x} < b_r$.  During training an instance $\mathbf{x}_t$ is received and the estimated rank $\hat{y}_t$ is calculated.  If $\hat{y}_t \ne y_t$, then $\mathbf{w}$ and the thresholds $b_r$ are updated according to a perceptron-like algorithm.  
+PRank \cite{crammer2001pranking} (Perceptron Ranking) is an online ranking algorithm with an update rule motivated by the classic perceptron algorithm.  The relevance rank is considered to be an ordered set $\{1, 2, \ldots, k \}$.  The ranking rule maintains a vector $\mathbf{w}$ and a series of thresholds $b_1 \le b_2 \ldots b_{k-1} \le b_k = \infty$.  Given a new instance $x$, the predicted rank is defined to be the index of the first threshold $b_r$ for which $\mathbf{w}^T \mathbf{x} < b_r$.  During training an instance $\mathbf{x}_t$ is received and the estimated rank $\hat{y}_t$ is calculated.  If $\hat{y}_t \ne y_t$, then $\mathbf{w}$ and the thresholds $b_r$ are updated according to a perceptron-like algorithm.
 
 Pointwise approaches are widely used because of their simplicity and effectiveness.  However, a problem with pointwise methods is that the loss function used in training the model will be dominated by those queries which match a large number of documents.  The loss function also does not take into account the position of documents in the ranking list, which can lead to unimportant documents being given too much weight.
 
