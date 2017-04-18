@@ -1,1 +1,1 @@
-java -jar ../../RankLib/RankLib.jar -load ../../model/ranknet1_model.txt -rank ../../data/Fold1/test.txt -score ../../data/Fold1/ranknet_score.txt
+java -jar ../../RankLib/RankLib.jar -load ../../model/RankNet/ranknet1_model.txt -rank ../../data/Fold1/test.txt -score ../../data/Fold1/ranknet_score.txt
