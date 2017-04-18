@@ -152,44 +152,40 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
     # load pretrained model
     model.load_model()
 
-    # test on vali
-    predictions = model.predict(X_vali)
-    accuracy_vali = metrics.accuracy_score(y_vali, predictions)
+    def evaluate_split(X, y, qid):
+      predictions = model.predict(X)
+      accuracy = metrics.accuracy_score(y, predictions)
+
+      cm = confusion_matrix(y, predictions)
+      classes = [str(c) for c in range(N_CLASSES)]
+      fig = plt.figure()
+      plot_confusion_matrix(cm, classes)
+      os.makedirs('../../figures', exist_ok=True)
+
+      # compute ndcg metrics
+      ndcg_score = metrics_over_dataset(predictions, y, qid, ndcg)
+      return accuracy, ndcg_score, fig
+
+    # eval on vali
+    accuracy_vali, ndcg_vali, fig = evaluate_split(X_vali, y_vali, qid_vali)
+    ndcg_vali_list.append(ndcg_vali)
     accuracy_vali_list.append(accuracy_vali)
+
     print()
     print("Validation accuracy: %f" % accuracy_vali)
-
-    cm = confusion_matrix(y_vali, predictions)
-    classes = [str(c) for c in range(N_CLASSES)]
-    fig = plt.figure()
-    plot_confusion_matrix(cm, classes)
-    os.makedirs('../../figures', exist_ok=True)
+    print("Validation nDCG: %f" % ndcg_vali)
     fig.savefig('../../figures/' + experiment_name + '-cm-vali.png')
 
-    # compute ndcg metrics
-    ndcg_vali = metrics_over_dataset(predictions, y_vali, qid_vali, ndcg)
-    ndcg_vali_list.append(ndcg_vali)
-    print("Validation nDCG: %f" % ndcg_vali)
-
-
-    # test on test set
-    predictions = model.predict(X_test)
-    accuracy_test = metrics.accuracy_score(y_test, predictions)
+    # eval on test set
+    accuracy_test, ndcg_test, fig = evaluate_split(X_test, y_test, qid_test)
     accuracy_test_list.append(accuracy_test)
+    ndcg_test_list.append(ndcg_test)
+
     print()
     print("Test accuracy: %f" % accuracy_test)
-
-    cm = confusion_matrix(y_test, predictions)
-    classes = [str(c) for c in range(N_CLASSES)]
-    fig = plt.figure()
-    plot_confusion_matrix(cm, classes)
-    os.makedirs('../../figures', exist_ok=True)
+    print("Test nDCG: %f" % ndcg_test)
     fig.savefig('../../figures/' + experiment_name + '-cm-test.png')
 
-    # compute ndcg metrics
-    ndcg_test = metrics_over_dataset(predictions, y_test, qid_test, ndcg)
-    ndcg_test_list.append(ndcg_test)
-    print("Test nDCG: %f" % ndcg_test)
 
 
   avg_accuracy_vali = np.mean(np.array(accuracy_vali_list))
