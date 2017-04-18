@@ -9,10 +9,16 @@ from sklearn import metrics
 from sklearn import preprocessing
 from sklearn.metrics import confusion_matrix
 import itertools
+import os
+import inspect
+import ranking_metrics as rm
 
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+ppdir = os.path.dirname(parentdir)
 
-DATA_TXT = '../../data/MSLR-WEB30K'
-DATA = '../../data/npy'
+DATA_TXT = ppdir + '/data'
+DATA = ppdir + '/data/npy'
 
 FOLDS = [1, 2]
 C = 0.01
@@ -108,7 +114,7 @@ def plot_confusion_matrix(cm, classes,
 
 
 
-def compute_ndcg(scores):
+def compute_ndcg(scores, k=10):
   """
   Computes the NDCG metric
   :param scores: numpy array
@@ -116,11 +122,10 @@ def compute_ndcg(scores):
   :return: double
       The NDCG metric
   """
-
-  def compute_dcg(scores):
-    n = scores.shape[0]
+  def compute_dcg(dcg_scores):
+    n = dcg_scores.shape[0]
     ranks = np.arange(n) + 1
-    gain = 2 ** scores - 1
+    gain = 2 ** dcg_scores - 1
     discount = 1 / np.log2(ranks + 1)
     discounted_gain = gain * discount
     dcg = np.sum(discounted_gain)
@@ -130,8 +135,8 @@ def compute_ndcg(scores):
 
   eps = 0.000001
 
-  dcg = compute_dcg(scores) + eps
-  opt_dcg = compute_dcg(opt_scores) + eps
+  dcg = compute_dcg(scores[:k]) + eps
+  opt_dcg = compute_dcg(opt_scores[:k]) + eps
 
   return dcg / opt_dcg
 
@@ -140,17 +145,22 @@ def metrics_over_dataset(ranking, relevance, qids, metrics_fn):
   uniqe_qids = np.unique(qids)
   avg_metrics = 0.0
   # compute metrics for each quid
+  short_queries = 0
   for qid in uniqe_qids.tolist():
     query_idxs = qids == qid
     query_rankings = ranking[query_idxs]
     query_relevance = relevance[query_idxs]
     # sort by rankings
-    sorted_idxs = np.argsort(query_rankings)[::-1]
-    query_relevance = query_relevance[sorted_idxs]
-    # compute metrics
-    metrics = metrics_fn(query_relevance)
-    avg_metrics += metrics
-  return avg_metrics / uniqe_qids.shape[0]
+    if len(query_rankings) < 10:
+      short_queries += 1
+      print("Rejecting QID with less than 10 documents:", qid)
+    else:
+      sorted_idxs = np.argsort(query_rankings)[::-1]
+      query_relevance = query_relevance[sorted_idxs]
+      # compute metrics
+      metrics = metrics_fn(query_relevance)
+      avg_metrics += metrics
+  return avg_metrics / (uniqe_qids.shape[0] - short_queries)
 
 
 # load data and store as numpy arrays
@@ -196,3 +206,12 @@ fig.savefig('../../figures/' + 'cm.png')
 # compute ndcg metrics
 ndcg = metrics_over_dataset(predictions, y_vali, qid_vali, compute_ndcg)
 print("NDCG: %f" % ndcg)
+
+err = metrics_over_dataset(predictions, y_vali, qid_vali, rm.ndcg)
+print("NDCG PM: %f" % err)
+
+err = metrics_over_dataset(predictions, y_vali, qid_vali, rm.err)
+print("ERR: %f" % err)
+
+
+
