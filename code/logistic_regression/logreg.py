@@ -4,7 +4,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
-from tf_logreg import LogisticRegressionTF
+from pointwise_ranker import PointwiseRanker
 from sklearn import metrics
 from sklearn import preprocessing
 from sklearn.metrics import confusion_matrix
@@ -117,6 +117,8 @@ def compute_ndcg(scores):
       The NDCG metric
   """
 
+  scores = np.array(scores)
+
   def compute_dcg(scores):
     n = scores.shape[0]
     ranks = np.arange(n) + 1
@@ -130,7 +132,7 @@ def compute_ndcg(scores):
 
   eps = 0.000001
 
-  dcg = compute_dcg(scores) + eps
+  dcg = compute_dcg(scores)
   opt_dcg = compute_dcg(opt_scores) + eps
 
   return dcg / opt_dcg
@@ -153,46 +155,57 @@ def metrics_over_dataset(ranking, relevance, qids, metrics_fn):
   return avg_metrics / uniqe_qids.shape[0]
 
 
-# load data and store as numpy arrays
-print('loading data')
-X_train, y_train, qid_train, X_vali, y_vali, qid_vali, X_test, y_test, qid_test = preprocess_datafold(1)
+if __name__ == "__main__":
+  # load data and store as numpy arrays
+  print('loading data')
+  X_train, y_train, qid_train, X_vali, y_vali, qid_vali, X_test, y_test, qid_test = preprocess_datafold(1)
 
-# init log. reg.
-# lg = LogisticRegression(C=C, random_state=seed, max_iter=MAX_ITER, n_jobs=-1,
-#                         verbose=1, solver='lbfgs', multi_class='multinomial')
+  # init log. reg.
+  # lg = LogisticRegression(C=C, random_state=seed, max_iter=MAX_ITER, n_jobs=-1,
+  #                         verbose=1, solver='lbfgs', multi_class='multinomial')
 
-input_dim = X_train.shape[1]
-lg = LogisticRegressionTF(input_dim, N_CLASSES, C=0.01, epochs=10,
-                          batch_size=256,
-                          class_weight=None,
-                          model_dir='../../model/logreg-nb')
+  input_dim = X_train.shape[1]
+  lg = PointwiseRanker(input_dim, N_CLASSES, C=0.01, epochs=10,
+                      batch_size=256,
+                      class_weight=None,
+                      model_dir='../../model/logreg-nb')
 
-scaler = preprocessing.StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_vali = scaler.transform(X_vali)
+  scaler = preprocessing.StandardScaler()
+  X_train = scaler.fit_transform(X_train)
+  X_vali = scaler.transform(X_vali)
 
-# load pretrained model
-# lg.load_model()
+  # load pretrained model
+  # lg.load_model()
 
-# fit
-print('fitting data')
-# lg.fit(X_train, y_train)
-lg.fit(X_train, y_train, validation_data=(X_vali, y_vali))
+  # fit
+  print('fitting data')
+  # lg.fit(X_train, y_train)
+  lg.fit(X_train, y_train, validation_data=(X_vali, y_vali))
+
+  # test on vali
+  predictions = lg.predict(X_vali)
+  score = metrics.accuracy_score(y_vali, predictions)
+  print()
+  print("Accuracy: %f" % score)
+
+  cm = confusion_matrix(y_vali, predictions)
+  classes = [str(c) for c in range(N_CLASSES)]
+  fig = plt.figure()
+  plot_confusion_matrix(cm, classes)
+  os.makedirs('../../figures', exist_ok=True)
+  fig.savefig('../../figures/' + 'cm.png')
+
+  # compute ndcg metrics
+  ndcg = metrics_over_dataset(predictions, y_vali, qid_vali, compute_ndcg)
+  print("NDCG: %f" % ndcg)
 
 
-# test
-predictions = lg.predict(X_vali)
-score = metrics.accuracy_score(y_vali, predictions)
-print()
-print("Accuracy: %f" % score)
+  # test on test set
+  predictions = lg.predict(X_test)
+  score = metrics.accuracy_score(y_test, predictions)
+  print()
+  print("Accuracy: %f" % score)
 
-cm = confusion_matrix(y_vali, predictions)
-classes = [str(c) for c in range(N_CLASSES)]
-fig = plt.figure()
-plot_confusion_matrix(cm, classes)
-os.makedirs('../../figures', exist_ok=True)
-fig.savefig('../../figures/' + 'cm.png')
-
-# compute ndcg metrics
-ndcg = metrics_over_dataset(predictions, y_vali, qid_vali, compute_ndcg)
-print("NDCG: %f" % ndcg)
+  # compute ndcg metrics
+  ndcg = metrics_over_dataset(predictions, y_test, qid_test, compute_ndcg)
+  print("NDCG: %f" % ndcg)
