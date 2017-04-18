@@ -11,7 +11,7 @@ from sklearn.metrics import confusion_matrix
 
 from data_tools import load_datafold
 from pointwise_ranker import PointwiseRanker
-from ranking_metrics import ndcg
+from ranking_metrics import ndcg, err
 from utils import plot_confusion_matrix, Timer
 
 
@@ -67,9 +67,11 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
   # save results in file
   accuracy_vali_list = []
   ndcg_vali_list = []
+  err_vali_list = []
 
   accuracy_test_list = []
   ndcg_test_list = []
+  err_test_list = []
 
   training_times = []
 
@@ -164,42 +166,51 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
 
       # compute ndcg metrics
       ndcg_score = metrics_over_dataset(predictions, y, qid, ndcg)
-      return accuracy, ndcg_score, fig
+      # compute err metrics
+      err_score = metrics_over_dataset(predictions, y, qid, err)
+
+      return accuracy, ndcg_score, err_score, fig
 
     # eval on vali
-    accuracy_vali, ndcg_vali, fig = evaluate_split(X_vali, y_vali, qid_vali)
-    ndcg_vali_list.append(ndcg_vali)
+    accuracy_vali, ndcg_vali, err_vali, fig = evaluate_split(X_vali, y_vali, qid_vali)
     accuracy_vali_list.append(accuracy_vali)
+    ndcg_vali_list.append(ndcg_vali)
+    err_vali_list.append(err_vali)
 
     print()
     print("Validation accuracy: %f" % accuracy_vali)
     print("Validation nDCG: %f" % ndcg_vali)
+    print("Validation ERR: %f" % err_vali)
     fig.savefig('../../figures/' + experiment_name + '-cm-vali.png')
 
     # eval on test set
-    accuracy_test, ndcg_test, fig = evaluate_split(X_test, y_test, qid_test)
+    accuracy_test, ndcg_test, err_test, fig = evaluate_split(X_test, y_test, qid_test)
     accuracy_test_list.append(accuracy_test)
     ndcg_test_list.append(ndcg_test)
+    err_test_list.append(err_test)
 
     print()
     print("Test accuracy: %f" % accuracy_test)
     print("Test nDCG: %f" % ndcg_test)
+    print("Test ERR: %f" % err_test)
     fig.savefig('../../figures/' + experiment_name + '-cm-test.png')
 
 
 
   avg_accuracy_vali = np.mean(np.array(accuracy_vali_list))
   avg_ndcg_vali = np.mean(np.array(ndcg_vali_list))
+  avg_err_vali = np.mean(np.array(err_vali_list))
 
   avg_accuracy_test = np.mean(np.array(accuracy_test_list))
   avg_ndcg_test = np.mean(np.array(ndcg_test_list))
+  avg_err_test = np.mean(np.array(err_test_list))
 
   avg_training_time = np.mean(np.array(training_times))
 
   results  = 'Averages of %d-fold cross-validation: \n' % len(folds)
-  results += 'split \t\t accuracy \t nDCG \n'
-  results += 'validation \t %.4f \t %.4f \n' % (avg_accuracy_vali, avg_ndcg_vali)
-  results += 'test \t\t %.4f \t %.4f \n' % (avg_accuracy_test, avg_ndcg_test)
+  results += 'split \t\t accuracy \t nDCG \t\t ERR \n'
+  results += 'validation \t %.4f \t %.4f \t %.4f \n' % (avg_accuracy_vali, avg_ndcg_vali, avg_err_vali)
+  results += 'test \t\t %.4f \t %.4f \t %.4f \n' % (avg_accuracy_test, avg_ndcg_test, avg_err_test)
   results += '\n'
   results += 'Average training time: %.1f minutes' % (avg_training_time / 60.0)
 
