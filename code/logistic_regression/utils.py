@@ -3,6 +3,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import itertools
+import time
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -34,3 +35,31 @@ def plot_confusion_matrix(cm, classes,
   plt.tight_layout()
   plt.ylabel('True label')
   plt.xlabel('Predicted label')
+
+
+class Timer(object):
+  def __init__(self, name=None, acc=False):
+    self.name = name
+    self.acc = acc
+    self.total = 0.0
+
+  def __enter__(self):
+    self.start()
+
+  def __exit__(self, type, value, traceback):
+    self.stop()
+
+  def start(self):
+    self.tstart = time.time()
+
+  def stop(self):
+    self.total += time.time() - self.tstart
+    if not self.acc:
+      return self.reset()
+
+  def reset(self):
+    if self.name:
+      print('[%s]' % self.name)
+    print('Elapsed: %.4f' % self.total)
+    self.total = 0.0
+    return self.total
