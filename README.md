@@ -27,7 +27,7 @@ Python code:
 
 To run the Python implementation of the logistic regresion and MLP classifiers, in the folder code/logistic_regression run:
 
-python experiments.py
+`python experiments.py`
 
 ---
 
