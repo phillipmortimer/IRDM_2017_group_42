@@ -10,7 +10,7 @@ import glob
 
 
 class PointwiseRanker(object):
-  def __init__(self, input_dim, n_classes, model_type='logreg', C=0.1, epochs=10, batch_size=32,
+  def __init__(self, input_dim, n_classes, model_type='logreg', C=0.1, epochs=10, batch_size=256,
                class_weight=None, model_dir=None):
     self.input_dim = input_dim
     self.n_classes = n_classes

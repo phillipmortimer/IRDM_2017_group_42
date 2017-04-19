@@ -15,18 +15,16 @@ from ranking_metrics import ndcg, err
 from utils import plot_confusion_matrix, Timer
 
 
-# list of experiments:
+# Usage: experiments.py [EXPERIMENT_ID]
+#        EXPERIMENT_ID - ID of experiment. Choose from the following list:
+# logistic regression -> with scikit learn -> baseline                   (1)
 #
-# logistic regression -> limited number of features       -> with scikit learn                          (1)
-#                                                         -> with tensorflow                            (2)
+#                     -> with TensorFlow   -> baseline                   (2)
+#                                          -> reguralisation (8 values)  (3)
+#                                          -> no feature normalization   (4)
+#                                          -> class balancing            (5)
 #
-#                     -> all the features with tensorflow -> vanilla                                    (3)
-#                                                         -> reguralisation (three values)              (4)
-#                                                         -> feature normalization                      (5)
-#                                                         -> class balancing                            (6)
-#                                                         -> feature normalization and class balancing  (7)
-#
-# multilayer perceptron with feature normalization and class balancing                                  (8)
+# multilayer perceptron with feature normalization                       (6)
 
 
 DATA_TXT = '../../data/MSLR-WEB30K'
@@ -101,7 +99,7 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
     if model_type == 'logreg_sk':
       model = LogisticRegression(C=reguralisation, random_state=SEED,
                                 max_iter=max_iter, n_jobs=-1, verbose=1,
-                                solver='lbfgs', multi_class='multinomial',
+                                solver='sag', multi_class='multinomial',
                                 class_weight=class_weight)
 
     elif model_type == 'logreg_tf':
@@ -131,6 +129,7 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
       scaler = preprocessing.StandardScaler()
       X_train = scaler.fit_transform(X_train)
       X_vali = scaler.transform(X_vali)
+      X_test = scaler.transform(X_test)
 
 
     # fit
@@ -149,10 +148,9 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
       timer.start()
       fit_fn()
       training_times.append(timer.stop())
-
-
-    # load pretrained model
-    model.load_model()
+    else:
+      # load pretrained model
+      model.load_model()
 
     def evaluate_split(X, y, qid):
       predictions = model.predict(X)
@@ -205,41 +203,48 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
   avg_ndcg_test = np.mean(np.array(ndcg_test_list))
   avg_err_test = np.mean(np.array(err_test_list))
 
+  std_accuracy_vali = np.std(np.array(accuracy_vali_list))
+  std_ndcg_vali = np.std(np.array(ndcg_vali_list))
+  std_err_vali = np.std(np.array(err_vali_list))
+
+  std_accuracy_test = np.std(np.array(accuracy_test_list))
+  std_ndcg_test = np.std(np.array(ndcg_test_list))
+  std_err_test = np.std(np.array(err_test_list))
+
   avg_training_time = np.mean(np.array(training_times))
 
   results  = 'Averages of %d-fold cross-validation: \n' % len(folds)
   results += 'split \t\t accuracy \t nDCG \t\t ERR \n'
-  results += 'validation \t %.4f \t %.4f \t %.4f \n' % (avg_accuracy_vali, avg_ndcg_vali, avg_err_vali)
-  results += 'test \t\t %.4f \t %.4f \t %.4f \n' % (avg_accuracy_test, avg_ndcg_test, avg_err_test)
+  results += 'validation \t %.3f+-%.3f \t %.3f+-%.3f \t %.3f+-%.3f \n' % (avg_accuracy_vali, std_accuracy_vali, avg_ndcg_vali, std_ndcg_vali, avg_err_vali, std_err_vali)
+  results += 'test \t\t %.3f+-%.3f \t %.3f+-%.3f \t %.3f+-%.3f \n' % (avg_accuracy_test, std_accuracy_test, avg_ndcg_test, std_ndcg_test, avg_err_test, std_err_test)
   results += '\n'
-  results += 'Average training time: %.1f minutes' % (avg_training_time / 60.0)
+  results += 'Average training time: %.1f seconds \n' % (avg_training_time)
+  results += '\n'
 
   print(results)
 
   os.makedirs(RESULTS_DIR, exist_ok=True)
-  with open(RESULTS_DIR + '/' + experiment_name + '-results.txt', 'w') as f:
+  with open(RESULTS_DIR + '/' + experiment_name + '-results.txt', 'a') as f:
     f.write(results)
 
 
 def print_help():
   s  = 'Usage: experiments.py [EXPERIMENT_ID] \n'
   s += '       EXPERIMENT_ID - ID of experiment. Choose from the following list: \n'
-  s += '         logistic regression -> limited number of features       -> with scikit learn                          (1) \n'
-  s += '                                                                 -> with tensorflow                            (2) \n'
+  s += '        logistic regression -> with scikit learn -> baseline                   (1) \n'
   s += '\n'
-  s += '                             -> all the features with tensorflow -> vanilla                                    (3) \n'
-  s += '                                                                 -> reguralisation (three values)              (4) \n'
-  s += '                                                                 -> feature normalization                      (5) \n'
-  s += '                                                                 -> class balancing                            (6) \n'
-  s += '                                                                 -> feature normalization and class balancing  (7) \n'
+  s += '                            -> with TensorFlow   -> baseline                   (2) \n'
+  s += '                                                 -> reguralisation (8 values)  (3) \n'
+  s += '                                                 -> no feature normalization   (4) \n'
+  s += '                                                 -> class balancing            (5) \n'
   s += '\n'
-  s += '         multilayer perceptron with feature normalization and class balancing                                  (8) \n'
+  s += '        multilayer perceptron                                                  (6) \n'
   print(s)
 
 
 
 if __name__ == "__main__":
-  folds = [1]
+  folds = FOLDS
   test_only = False
 
   if len(sys.argv) != 2:
@@ -248,103 +253,62 @@ if __name__ == "__main__":
 
   experiment = int(sys.argv[1])
   if   experiment == 1:
-    run_experiment(str(experiment) + '-lg_sk',
+    run_experiment(str(experiment) + '-lg_sk-baseline',
                    folds=folds,
                    model_type='logreg_sk',
-                   reguralisation=0.01,
-                   feature_normalization=False,
+                   reguralisation=0.00001,
+                   feature_normalization=True,
                    class_balancing=False,
-                   n_iters=200,
-                   n_subset_features=10,
+                   max_iter=10,
                    test_only=test_only)
 
   elif experiment == 2:
-    run_experiment(str(experiment) + '-lg_tf',
+    run_experiment(str(experiment) + '-lg_tf-baseline',
                    folds=folds,
                    model_type='logreg_tf',
-                   reguralisation=0.01,
-                   feature_normalization=False,
+                   reguralisation=0.0,
+                   feature_normalization=True,
                    class_balancing=False,
                    epochs=10,
-                   n_subset_features=10,
                    test_only=test_only)
 
   elif experiment == 3:
-    run_experiment(str(experiment) + '-lg_tf-vanilla',
-                   folds=folds,
-                   model_type='logreg_tf',
-                   reguralisation=0.01,
-                   feature_normalization=False,
-                   class_balancing=False,
-                   epochs=10,
-                   test_only=test_only)
+    reguralisations = [0.0, 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1.0]
+    for reguralisation in reguralisations:
+      run_experiment(str(experiment) + '-lg_tf-reg-' + str(reguralisation),
+                     folds=folds,
+                     model_type='logreg_tf',
+                     reguralisation=reguralisation,
+                     feature_normalization=True,
+                     class_balancing=False,
+                     epochs=10,
+                     test_only=test_only)
 
   elif experiment == 4:
-    reguralisation = 0.01
-    run_experiment(str(experiment) + '-lg_tf-reg-' + str(reguralisation),
+    run_experiment(str(experiment) + '-lg_tf-no_feat_norm',
                    folds=folds,
                    model_type='logreg_tf',
-                   reguralisation=reguralisation,
-                   feature_normalization=False,
-                   class_balancing=False,
-                   epochs=10,
-                   test_only=test_only)
-
-    reguralisation = 0.1
-    run_experiment(str(experiment) + '-lg_tf-reg-' + str(reguralisation),
-                   folds=folds,
-                   model_type='logreg_tf',
-                   reguralisation=reguralisation,
-                   feature_normalization=False,
-                   class_balancing=False,
-                   epochs=10,
-                   test_only=test_only)
-
-    reguralisation = 1.0
-    run_experiment(str(experiment) + '-lg_tf-reg-' + str(reguralisation),
-                   folds=folds,
-                   model_type='logreg_tf',
-                   reguralisation=reguralisation,
+                   reguralisation=0.0,
                    feature_normalization=False,
                    class_balancing=False,
                    epochs=10,
                    test_only=test_only)
 
   elif experiment == 5:
-    run_experiment(str(experiment) + '-lg_tf-feat_norm',
+    run_experiment(str(experiment) + '-lg_tf-balanc',
                    folds=folds,
                    model_type='logreg_tf',
-                   reguralisation=0.01,
+                   reguralisation=0.0,
                    feature_normalization=True,
-                   class_balancing=False,
+                   class_balancing=True,
                    epochs=10,
                    test_only=test_only)
 
   elif experiment == 6:
-    run_experiment(str(experiment) + '-lg_tf-balanc',
-                   folds=folds,
-                   model_type='logreg_tf',
-                   reguralisation=0.01,
-                   feature_normalization=False,
-                   class_balancing=True,
-                   epochs=10,
-                   test_only=test_only)
-
-  elif experiment == 7:
-    run_experiment(str(experiment) + '-lg_tf-feat_norm+balanc',
-                   folds=folds,
-                   model_type='logreg_tf',
-                   reguralisation=0.01,
-                   feature_normalization=True,
-                   class_balancing=True,
-                   epochs=10,
-                   test_only=test_only)
-
-  elif experiment == 8:
     run_experiment(str(experiment) + '-MLP',
                    folds=folds,
                    model_type='MLP',
                    feature_normalization=True,
-                   class_balancing=True,
+                   class_balancing=False,
                    epochs=20,
                    test_only=test_only)
