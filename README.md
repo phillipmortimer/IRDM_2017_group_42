@@ -1,6 +1,6 @@
 # IRDM 2017 Group Project
 ## Option 2: Learning to Rank
-### Group 42: I-Horng Huang, Tom Jakab, Phillip Mortimer
+### Group 42: I-Horng Huang, Tomas Jakab, Phillip Mortimer
 
 ---
 
@@ -25,9 +25,21 @@ The RankLib algorithms can be run using the shell files in each algorithm's name
 
 Python code:
 
-To run the Python implementation of the logistic regresion and MLP classifiers, in the folder code/logistic_regression run:
+To replicate the experiments with the logistic regresion and MLP classifiers from the report, in the folder code/logistic_regression run:
 
-`python experiments.py`
+`python experiments.py [EXPERIMENT_ID]`
+
+`EXPERIMENT_ID` - ID of the experiment. Choose from the following list:
+* logistic regression
+  * with scikit learn
+    * baseline   [1]
+  * with TensorFlow baseline   [2]
+    * reguralisation (8 values)   [3]
+    * no feature normalization   [4]
+    * class balancing   [5]
+ * multilayer perceptron with feature normalization   [6]
+
+ The code for logistic regression and MLP is implemented in the class `PointwiseRanker` in the file code/logistic_regression/pointwise_ranker.py
 
 ---
 
@@ -51,15 +63,7 @@ This document contains the LaTeX file for the group report and images used in th
 ### model
 
 This folder contains saved models for the RankLib algorithms, as well as log files saved during the hyper-parameter search performed for each algorithm.
- 
+
 ### RankLib
 
 The .jar file for the RankLib library
-
-
-
-
-
-
-
-
