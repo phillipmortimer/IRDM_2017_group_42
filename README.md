@@ -33,7 +33,8 @@ To replicate the experiments with the logistic regresion and MLP classifiers fro
 * logistic regression
   * with scikit learn
     * baseline   [1]
-  * with TensorFlow baseline   [2]
+  * with TensorFlow
+    * baseline   [2]
     * reguralisation (8 values)   [3]
     * no feature normalization   [4]
     * class balancing   [5]
