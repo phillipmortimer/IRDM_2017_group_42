@@ -60,6 +60,7 @@ class Timer(object):
   def reset(self):
     if self.name:
       print('[%s]' % self.name)
-    print('Elapsed: %.4f' % self.total)
+    elapsed = self.total
+    print('Elapsed: %.4f' % elapsed)
     self.total = 0.0
-    return self.total
+    return elapsed
