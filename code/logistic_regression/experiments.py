@@ -1,3 +1,4 @@
+import inspect
 import os
 import sys
 
@@ -14,22 +15,23 @@ from pointwise_ranker import PointwiseRanker
 from ranking_metrics import ndcg, err
 from utils import plot_confusion_matrix, Timer
 
+"""
+Usage: experiments.py [EXPERIMENT_ID]
+      EXPERIMENT_ID - ID of experiment. Choose from the following list:
+ logistic regression -> with scikit learn -> baseline                   (1)
+                     -> with TensorFlow   -> baseline                   (2)
+                                          -> reguralisation (8 values)  (3)
+                                          -> no feature normalization   (4)
+                                          -> class balancing            (5)
+ multilayer perceptron with feature normalization                       (6)
+"""
 
-# Usage: experiments.py [EXPERIMENT_ID]
-#        EXPERIMENT_ID - ID of experiment. Choose from the following list:
-# logistic regression -> with scikit learn -> baseline                   (1)
-#
-#                     -> with TensorFlow   -> baseline                   (2)
-#                                          -> reguralisation (8 values)  (3)
-#                                          -> no feature normalization   (4)
-#                                          -> class balancing            (5)
-#
-# multilayer perceptron with feature normalization                       (6)
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+root_dir = os.path.dirname(os.path.dirname(current_dir))
 
-
-DATA_TXT = '../../data/MSLR-WEB30K'
-DATA = '../../data/npy'
-RESULTS_DIR = '../../results'
+DATA_TXT = root_dir + os.sep + 'data'
+DATA = root_dir + os.sep + 'data' + os.sep + 'cache'
+RESULTS_DIR = root_dir + os.sep + 'results'
 
 FOLDS = [1, 2, 3, 4, 5]
 N_FEATURES = 136
@@ -78,8 +80,8 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
 
     # load data and store as numpy arrays
     print('loading data')
-    source_dir = DATA_TXT + '/' + 'Fold' + str(fold)
-    cache_dir = DATA + '/Fold' + str(fold)
+    source_dir = DATA_TXT + os.sep + 'Fold' + str(fold)
+    cache_dir = DATA + os.sep + 'Fold' + str(fold)
     X_train, y_train, qid_train, X_vali, y_vali, qid_vali, X_test, y_test, qid_test = load_datafold(source_dir, N_FEATURES, cache_dir=cache_dir)
 
     if n_subset_features is not None:
@@ -110,7 +112,7 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
                               model_type='logreg',
                               batch_size=256,
                               class_weight=class_weight,
-                              model_dir='../../model/' + experiment_name)
+                              model_dir=root_dir + os.sep + 'model' + os.sep + experiment_name)
 
     elif model_type == 'MLP':
       model = PointwiseRanker(input_dim,
@@ -119,7 +121,7 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
                               model_type='MLP',
                               batch_size=256,
                               class_weight=class_weight,
-                              model_dir='../../model/' + experiment_name)
+                              model_dir=root_dir + os.sep + 'model' + os.sep + experiment_name)
 
     else:
       raise ValueError('Unsupported model type: ' + model_type)
@@ -160,7 +162,7 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
       classes = [str(c) for c in range(N_CLASSES)]
       fig = plt.figure()
       plot_confusion_matrix(cm, classes)
-      os.makedirs('../../figures', exist_ok=True)
+      os.makedirs(root_dir + os.sep + 'figures', exist_ok=True)
 
       # compute ndcg metrics
       ndcg_score = metrics_over_dataset(predictions, y, qid, ndcg)
@@ -179,7 +181,7 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
     print("Validation accuracy: %f" % accuracy_vali)
     print("Validation nDCG: %f" % ndcg_vali)
     print("Validation ERR: %f" % err_vali)
-    fig.savefig('../../figures/' + experiment_name + '-cm-vali.png')
+    fig.savefig(root_dir + os.sep + 'figures' + os.sep + experiment_name + '-cm-vali.png')
 
     # eval on test set
     accuracy_test, ndcg_test, err_test, fig = evaluate_split(X_test, y_test, qid_test)
@@ -191,7 +193,7 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
     print("Test accuracy: %f" % accuracy_test)
     print("Test nDCG: %f" % ndcg_test)
     print("Test ERR: %f" % err_test)
-    fig.savefig('../../figures/' + experiment_name + '-cm-test.png')
+    fig.savefig(root_dir + os.sep + 'figures' + os.sep + experiment_name + '-cm-test.png')
 
 
 
@@ -224,7 +226,7 @@ def run_experiment(experiment_name, folds=[1], model_type='logreg_tf',
   print(results)
 
   os.makedirs(RESULTS_DIR, exist_ok=True)
-  with open(RESULTS_DIR + '/' + experiment_name + '-results.txt', 'a') as f:
+  with open(RESULTS_DIR + os.sep + experiment_name + '-results.txt', 'a') as f:
     f.write(results)
 
 

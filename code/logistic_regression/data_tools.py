@@ -29,10 +29,10 @@ def load_datafold(source_dir, n_features, cache_dir=None):
     return X, y, qid
 
   def load_datasplit(split):
-    split_txt = source_dir + '/' + split + '.txt'
-    X_file = cache_dir + '/X_' + split + '.npy'
-    y_file = cache_dir + '/y_' + split + '.npy'
-    qid_file = cache_dir + '/qid_' + split + '.npy'
+    split_txt = source_dir + os.sep + split + '.txt'
+    X_file = cache_dir + os.sep + 'X_' + split + '.npy'
+    y_file = cache_dir + os.sep + 'y_' + split + '.npy'
+    qid_file = cache_dir + os.sep + 'qid_' + split + '.npy'
     if not os.path.isfile(X_file) or not os.path.isfile(y_file):
       X, y, qid = load_datafile(split_txt)
       if cache_dir is not None:

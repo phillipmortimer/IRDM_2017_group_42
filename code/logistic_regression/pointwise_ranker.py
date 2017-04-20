@@ -34,7 +34,7 @@ class PointwiseRanker(object):
     if self.model_dir is not None:
       os.makedirs(self.model_dir, exist_ok=True)
       checkpointer = ModelCheckpoint(
-        filepath=self.model_dir + '/weights-{val_loss:.3f}-{epoch:02d}.hdf5',
+        filepath=self.model_dir + os.sep + 'weights-{val_loss:.3f}-{epoch:02d}.hdf5',
         verbose=1, save_best_only=True, save_weights_only=True)
       callbacks.append(checkpointer)
 
@@ -82,7 +82,7 @@ class PointwiseRanker(object):
 
 
   def load_model(self):
-    models = glob.glob(self.model_dir + '/weights-*-*.hdf5')
-    losses = np.array([float(model.split('/')[-1].split('-')[1]) for model in models])
+    models = glob.glob(self.model_dir + os.sep + 'weights-*-*.hdf5')
+    losses = np.array([float(model.split(os.sep)[-1].split('-')[1]) for model in models])
     idx = np.argmin(losses)
     self.model.load_weights(models[idx])
