@@ -10,6 +10,29 @@ import glob
 
 
 class PointwiseRanker(object):
+  """Pointwise ranking algorithm using a logistic regression or MLP models.
+
+  :param input_dim: int
+    The dimensionality of the input features.
+  :param n_classes: int
+    The number of classes.
+  :param model_type: string (optional)
+    One of `"logreg"`, `"MLP"`. Specifies the type of model for the classifer.
+    `"logreg"` uses logistic regression, `"MLP"` multi-layer perceptron.
+  :param C: float (optional)
+    L2 reguralisation coefficient for logistic regression.
+  :param epochs: int (optional)
+    The maximum number of epoch to train for.
+  :param batch_size: int (optional)
+    The batch size used in training.
+  :param class_weight: string (optional)
+    One of "`balanced`" or None.  "`balanced`" results in rebalancing
+    the class weights in the loss function.
+  :param: model_dir: string (optional)
+    Specifies directory to save the trained model.
+    If None, the model is not saved.
+  """
+
   def __init__(self, input_dim, n_classes, model_type='logreg', C=0.1, epochs=10, batch_size=256,
                class_weight=None, model_dir=None):
     self.input_dim = input_dim
@@ -26,6 +49,16 @@ class PointwiseRanker(object):
 
 
   def fit(self, X, y, validation_data=None):
+    """Fits the model.
+
+    :param  X: Numpy array
+      Samples in rows, features in columns.
+    :param y: Numpy vector
+      Labels.
+    :param validation_data: tuple
+      A tuple (X_val, y_val) of validation data. If None, validation score
+      is not reported during the training.
+    """
     callbacks = []
     early_stopping = EarlyStopping(monitor='val_loss', patience=2,
                                    verbose=1, mode='auto')
@@ -76,6 +109,14 @@ class PointwiseRanker(object):
 
 
   def predict(self, X):
+    """Predicts classes given features.
+
+    :param X: Numpy array
+      Samples in rows, features in columns.
+
+    :return: Numpy vector
+      Predicted classes.
+    """
     predictions = self.model.predict_classes(X, batch_size=self.batch_size,
                                              verbose=1)
     return predictions
